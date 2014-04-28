@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>飞镖计分器 - Dart Scorer</title>
+<style type="text/css">
+  .title {
+    margin-top: 10pt;
+    margin-bottom: 5pt;
+  }
+  .parallel{ float: left; }
+</style>
+</head>
+<body>
+<h2>飞镖计分器 - Dart Scorer</h2>
+
+<div id="init">
+  <div class="title">请输入起始分数 - Please input initial score：</div>
+  <div><input type="text" id="initscore" name="initscore" value="301" onChange="init()" /></div></div>
+
+<div class="title"><label for="jiafang">参赛方（Participants）：</label></div>
+<div><input type="text" id="jiafang" name="jiafang" value="甲队"></input>
+     <input type="text" id="yifang" name="yifang" value="乙队"></input></div>
+
+<div class="title">剩余分数（Target Score）：</div>
+<div><input type="text" readonly="readonly" id="currJiaScore" value="301"></input>
+  <input type="text" readonly="readonly" id="currYiScore" value="301"></input></div>
+
+<div class="title">本轮分数（Round Score）：</div>
+<div class="parallel"><form action="" onSubmit="submitTo('jiafang','roundJiaScore','currJiaScore');return false;">
+      <input id="roundJiaScore" value="0"></input><br/>
+      <input type="submit" value="提交"></input></form></div>
+<div><form action="" onSubmit="submitTo('yifang','roundYiScore','currYiScore');return false;">
+      <input id="roundYiScore" value="0"></input><br/>
+      <input type="submit" value="提交"></input></form></div>
+
+<script type="text/javascript">
+  // 初始化玩家起始分数
+  function init(){
+    document.getElementById("currJiaScore").value = document.getElementById("initscore").value;
+    document.getElementById("currYiScore").value = document.getElementById("initscore").value;
+  }
+  // 提交一轮分数
+  function submitTo(p, src, tgt){
+    var source = document.getElementById(src);
+    var target = document.getElementById(tgt);
+    var sv = eval(source.value), tv = target.value;
+    if ( valid(tv,sv) ) {
+      target.value = tv - sv;
+    } else {
+      warning();
+    }
+    source.value = 0;
+    if ( target.value==0 ) {
+      win(p);
+    }
+  }
+  // 检查分数是否有效
+  function valid(currScore, score) {
+    if (score>currScore || currScore-score==1) return false;
+    return true;
+  }
+  // 若分数无效，输出警告信息
+  function warning(){
+    alert("Oops! Downflow or make exactly 1. This round is fucked!");
+  }
+  // 游戏结束，输出赢家
+  function win(w) {
+    var winner = document.getElementById(w).value;
+    alert("Congratulations! " + winner + " wins!");
+  }
+</script>
+
+</body>
+</html>
